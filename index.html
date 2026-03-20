@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inova Senai - Plataforma de Feedback & Melhoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #8B1A3A;
+    --primary-dark: #6d1530;
+    --navy: #1a2744;
+    --navy-dark: #111b33;
+    --gray-bg: #f0f0f0;
+    --gray-card: #e8e8e8;
+    --text: #222;
+    --text-light: #555;
+    --white: #fff;
+    --star-active: #8B1A3A;
+    --star-inactive: #ddd;
+    --accent-yellow: #e8c842;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: #fff; color: var(--text); }
+ 
+  /* ===== NAVBAR ===== */
+  .navbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 32px; background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top:0; z-index:100;
+  }
+  .navbar-left { display: flex; align-items: center; gap: 18px; }
+  .navbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-circle {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--primary); display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900; font-size: 15px; letter-spacing: -1px; position: relative;
+  }
+  .logo-circle::after {
+    content: ''; position: absolute; bottom: 4px; right: -4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--navy); border: 2px solid #fff;
+  }
+  .logo-text { line-height: 1.1; }
+  .logo-text span { display: block; font-weight: 900; font-size: 18px; color: var(--primary); text-transform: lowercase; }
+  .logo-text small { font-size: 9px; color: var(--navy); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+  .navbar-divider { width: 1px; height: 32px; background: #ddd; }
+  .navbar-brand-name { font-size: 14px; color: var(--text); font-weight: 600; }
+  .navbar-links { display: flex; align-items: center; gap: 28px; }
+  .navbar-links a {
+    color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600;
+    transition: color 0.2s;
+  }
+  .navbar-links a:hover { color: var(--primary); }
+  .navbar-right { display: flex; align-items: center; gap: 12px; }
+  .btn-perfil {
+    background: var(--navy); color: #fff; border: none; padding: 8px 20px;
+    border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: background 0.2s;
+  }
+  .btn-perfil:hover { background: var(--navy-dark); }
+  .icon-user { font-size: 22px; color: var(--navy); cursor: pointer; }
+ 
+  /* ===== PAGES ===== */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+ 
+  /* ===== LANDING PAGE ===== */
+  #page-landing .navbar { box-shadow: none; border-bottom: 1px solid #eee; }
+  #page-landing .navbar-links { display: none; }
+  #page-landing .navbar-right { display: none; }
+  .landing-hero {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 60px 80px; gap: 40px; min-height: calc(100vh - 70px);
+  }
+  .landing-left { flex: 1; }
+  .landing-logo-big { display: flex; align-items: center; gap: 18px; margin-bottom: 32px; }
+  .logo-big-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--primary); display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900; font-size: 26px; letter-spacing: -1px; position: relative;
+  }
+  .logo-big-circle::after {
+    content: ''; position: absolute; bottom: 6px; right: -6px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--navy); border: 3px solid #fff;
+  }
+  .logo-big-text span { display: block; font-weight: 900; font-size: 48px; color: var(--primary); text-transform: lowercase; line-height: 1; }
+  .logo-big-text small { font-size: 11px; color: var(--navy); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+  .landing-title { font-size: 32px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+  .landing-subtitle { font-size: 16px; color: var(--text-light); margin-bottom: 28px; }
+  .btn-feedback-main {
+    background: var(--primary); color: #fff; border: none;
+    padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; transition: background 0.2s;
+    display: inline-block; margin-bottom: 18px;
+  }
+  .btn-feedback-main:hover { background: var(--primary-dark); }
+  .landing-cadastro { font-size: 13px; font-weight: 800; color: var(--navy); letter-spacing: 2px; cursor: pointer; }
+  .landing-cadastro:hover { text-decoration: underline; }
+  .landing-right { flex: 1; display: flex; justify-content: center; position: relative; }
+  .school-illustration { font-size: 180px; }
+  .floating-icons { position: absolute; top: 0; right: 0; }
+  .fi { position: absolute; font-size: 28px; }
+ 
+  /* ===== SCHOOL SVG ===== */
+  .school-svg-wrap { position: relative; width: 320px; height: 260px; }
+ 
+  /* ===== AUTH PAGE ===== */
+  #page-auth { background: #fff; }
+  .auth-hero {
+    display: flex; align-items: flex-start; padding: 60px 80px;
+    gap: 60px; min-height: calc(100vh - 0px);
+  }
+  .auth-left { flex: 1; }
+  .auth-brand { margin-bottom: 24px; }
+  .auth-brand .techflow { font-size: 22px; font-weight: 900; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+  .auth-title { font-size: 28px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .auth-subtitle { font-size: 14px; color: var(--text-light); margin-bottom: 32px; }
+  .auth-forms { display: flex; gap: 24px; flex-wrap: wrap; }
+  .auth-card {
+    background: #fff; border: 1px solid #ddd; border-radius: 12px;
+    padding: 24px; min-width: 220px; flex: 1;
+  }
+  .auth-card h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
+  .auth-input {
+    width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 6px;
+    font-size: 13px; font-family: 'Nunito', sans-serif; margin-bottom: 10px;
+    outline: none; transition: border 0.2s;
+  }
+  .auth-input:focus { border-color: var(--primary); }
+  .btn-criar {
+    width: 100%; background: var(--primary); color: #fff; border: none;
+    padding: 11px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-top: 6px;
+    transition: background 0.2s;
+  }
+  .btn-criar:hover { background: var(--primary-dark); }
+  .btn-entrar {
+    width: 100%; background: var(--navy); color: #fff; border: none;
+    padding: 11px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-top: 6px;
+    transition: background 0.2s;
+  }
+  .btn-entrar:hover { background: var(--navy-dark); }
+  .auth-right { flex: 1; display: flex; align-items: center; justify-content: center; padding-top: 60px; }
+ 
+  /* ===== FEED PAGE ===== */
+  .feed-header { padding: 24px 32px 12px; }
+  .feed-header h2 { font-size: 22px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+  .feed-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; padding: 0 32px 32px;
+  }
+  .feed-card {
+    background: var(--gray-card); border-radius: 10px; padding: 16px;
+    cursor: pointer; transition: box-shadow 0.2s, transform 0.15s;
+  }
+  .feed-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.13); transform: translateY(-2px); }
+  .feed-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; justify-content: space-between; }
+  .feed-card-user { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--navy); }
+  .feed-cat-badge {
+    background: #fff; color: var(--primary); font-size: 11px; font-weight: 700;
+    border-radius: 4px; padding: 2px 8px; border: 1.5px solid var(--primary);
+  }
+  .feed-card-text { font-size: 12px; color: #444; line-height: 1.5; margin-bottom: 12px; }
+  .stars-row { display: flex; gap: 3px; }
+  .star { font-size: 16px; color: var(--star-inactive); }
+  .star.filled { color: var(--star-active); }
+  .btn-escrever-feed {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--primary); color: #fff; border: none;
+    padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; box-shadow: 0 4px 16px rgba(139,26,58,0.3);
+    transition: background 0.2s;
+  }
+  .btn-escrever-feed:hover { background: var(--primary-dark); }
+ 
+  /* ===== ENVIAR FEEDBACK PAGE ===== */
+  .feedback-form-wrap { display: flex; gap: 48px; padding: 32px 48px; flex-wrap: wrap; }
+  .feedback-form-left { flex: 1; min-width: 260px; }
+  .feedback-form-left h2 { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .feedback-textarea {
+    width: 100%; height: 160px; border: 1.5px solid #ccc; border-radius: 8px;
+    padding: 14px; font-size: 14px; font-family: 'Nunito', sans-serif;
+    resize: none; outline: none; background: var(--gray-card); transition: border 0.2s;
+  }
+  .feedback-textarea:focus { border-color: var(--primary); }
+  .btn-enviar {
+    float: right; background: var(--primary); color: #fff; border: none;
+    padding: 10px 28px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .btn-enviar:hover { background: var(--primary-dark); }
+  .identity-row { display: flex; gap: 24px; margin-top: 52px; flex-wrap: wrap; }
+  .radio-label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+  .radio-label input { accent-color: var(--navy); }
+  .name-input {
+    width: 100%; padding: 9px 14px; border: 1.5px solid #ccc; border-radius: 6px;
+    font-size: 13px; font-family: 'Nunito', sans-serif; margin-top: 10px;
+    outline: none; transition: border 0.2s;
+  }
+  .name-input:focus { border-color: var(--primary); }
+  .stars-rating { display: flex; gap: 8px; margin-top: 24px; }
+  .star-rate { font-size: 32px; color: var(--star-inactive); cursor: pointer; transition: color 0.15s; }
+  .star-rate.filled { color: var(--star-active); }
+  .stars-label { font-size: 15px; font-weight: 700; color: var(--navy); margin-top: 8px; }
+  .feedback-form-right { flex: 1; min-width: 220px; }
+  .feedback-form-right h3 { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+  .cat-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .cat-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .cat-list li input { accent-color: var(--navy); width: 18px; height: 18px; cursor: pointer; }
+  .cat-other-input {
+    padding: 8px 14px; border: 1.5px solid #ccc; border-radius: 6px;
+    font-size: 13px; font-family: 'Nunito', sans-serif; width: 100%; margin-top: 6px;
+    outline: none;
+  }
+ 
+  /* ===== DETAIL PAGE ===== */
+  .detail-wrap { display: flex; gap: 32px; padding: 32px 48px; flex-wrap: wrap; }
+  .detail-left { flex: 2; min-width: 280px; }
+  .detail-left h2 { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .detail-card { background: var(--gray-card); border-radius: 10px; padding: 24px; }
+  .detail-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; justify-content: space-between; }
+  .detail-text { font-size: 13px; color: #333; line-height: 1.7; margin-bottom: 16px; }
+  .btn-voltar {
+    background: var(--navy); color: #fff; border: none;
+    padding: 11px 28px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-top: 20px;
+    transition: background 0.2s;
+  }
+  .btn-voltar:hover { background: var(--navy-dark); }
+  .detail-right { flex: 1; min-width: 220px; }
+  .detail-right h3 { font-size: 16px; font-weight: 800; color: var(--navy); margin-bottom: 16px; }
+  .comment-card { background: var(--gray-card); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .comment-user { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .comment-text { font-size: 13px; color: #444; line-height: 1.5; }
+ 
+  /* ===== STATS PAGE ===== */
+  .stats-wrap { padding: 32px 48px; }
+  .stats-wrap h2 { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .stats-cards { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+  .stat-card {
+    flex: 1; min-width: 180px; background: var(--gray-card); border-radius: 10px;
+    padding: 20px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .stat-card-icon { font-size: 22px; }
+  .stat-card-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .stat-card-num { font-size: 36px; font-weight: 900; color: var(--primary); }
+  .stat-card-sub { font-size: 12px; color: var(--text-light); font-weight: 600; }
+  .stat-card-num2 { font-size: 36px; font-weight: 900; color: var(--navy); }
+  .stats-bottom { display: flex; gap: 24px; flex-wrap: wrap; }
+  .stats-chart-card { flex: 1; min-width: 260px; background: var(--gray-card); border-radius: 10px; padding: 24px; }
+  .stats-chart-card h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .pie-wrap { display: flex; align-items: center; gap: 24px; }
+  .pie-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .stats-recent { flex: 1; min-width: 220px; }
+  .stats-recent h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
+  .recent-card { background: var(--gray-card); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .recent-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: var(--navy); }
+  .recent-card-text { font-size: 13px; color: #444; font-style: italic; }
+ 
+  /* ===== PROFILE PAGE ===== */
+  .profile-wrap { padding: 32px 48px; }
+  .profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 32px; }
+  .profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; }
+  .profile-info h2 { font-size: 20px; font-weight: 800; color: var(--navy); }
+  .profile-info p { font-size: 14px; color: var(--text-light); }
+  .btn-edit {
+    background: var(--navy); color: #fff; border: none;
+    padding: 10px 22px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-left: 18px;
+    transition: background 0.2s;
+  }
+  .btn-edit:hover { background: var(--navy-dark); }
+  .profile-menu { display: flex; flex-direction: column; gap: 14px; max-width: 400px; }
+  .profile-menu-item {
+    background: var(--gray-card); border-radius: 10px; padding: 18px 22px;
+    display: flex; align-items: center; gap: 14px; cursor: pointer; transition: box-shadow 0.2s;
+    font-size: 16px; font-weight: 700; color: var(--primary);
+  }
+  .profile-menu-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .profile-menu-item .menu-icon { font-size: 20px; }
+  .btn-voltar-inicio {
+    background: var(--navy); color: #fff; border: none;
+    padding: 11px 28px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif; margin-top: 28px;
+    transition: background 0.2s;
+  }
+  .btn-voltar-inicio:hover { background: var(--navy-dark); }
+ 
+  /* ===== ENVIADO PAGE ===== */
+  #page-enviado { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  #page-enviado.active { display: flex; }
+  .enviado-label { align-self: flex-start; margin: 24px 48px; font-size: 18px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+  .enviado-content { text-align: center; padding: 40px; }
+  .enviado-title { font-size: 32px; font-weight: 900; color: var(--navy); margin-bottom: 32px; }
+  .btn-enviado {
+    display: block; width: 340px; padding: 15px; border-radius: 8px;
+    font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif;
+    margin: 0 auto 14px; border: none; transition: background 0.2s;
+  }
+  .btn-enviado-primary { background: var(--primary); color: #fff; }
+  .btn-enviado-primary:hover { background: var(--primary-dark); }
+  .btn-enviado-outline { background: var(--primary); color: #fff; opacity: 0.85; }
+  .btn-enviado-outline:hover { opacity: 1; }
+ 
+  /* ===== PIE CHART ===== */
+  .pie-svg { width: 140px; height: 140px; }
+ 
+  /* ===== UTILITIES ===== */
+  .icon-svg { width: 20px; height: 20px; }
+  .user-icon { font-size: 24px; color: var(--navy); }
+ 
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 800px) {
+    .landing-hero { flex-direction: column; padding: 32px 24px; }
+    .landing-right { display: none; }
+    .auth-hero { flex-direction: column; padding: 24px; }
+    .auth-right { display: none; }
+    .feed-grid { grid-template-columns: 1fr; padding: 0 16px 80px; }
+    .feedback-form-wrap { padding: 24px; flex-direction: column; }
+    .detail-wrap { padding: 24px; flex-direction: column; }
+    .stats-wrap { padding: 24px; }
+    .profile-wrap { padding: 24px; }
+    .stats-bottom { flex-direction: column; }
+    .navbar { padding: 10px 16px; }
+    .navbar-links { display: none; }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- =============================== LANDING PAGE =============================== -->
+<div id="page-landing" class="page active">
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-logo">
+        <div class="logo-circle" style="width:38px;height:38px;font-size:12px;">is</div>
+        <div style="display:flex;flex-direction:column;line-height:1.1;">
+          <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+        </div>
+      </div>
+      <div class="navbar-divider"></div>
+      <span class="navbar-brand-name">Inova Senai</span>
+    </div>
+  </nav>
+  <div class="landing-hero">
+    <div class="landing-left">
+      <div class="landing-logo-big">
+        <div class="logo-big-circle">is</div>
+        <div class="logo-big-text">
+          <span>inova<br>senai</span>
+          <small>Plataforma de Feedback &amp; Melhoria</small>
+        </div>
+      </div>
+      <h1 class="landing-title">Bem-Vindo ao Inova Senai</h1>
+      <p class="landing-subtitle">Comece a escrever seus Feedbacks</p>
+      <button class="btn-feedback-main" onclick="goTo('page-feed')">Quero escrever meu feedback !</button>
+      <div class="landing-cadastro" onclick="goTo('page-auth')">CADASTRE-SE</div>
+    </div>
+    <div class="landing-right">
+      <svg width="340" height="280" viewBox="0 0 340 280" xmlns="http://www.w3.org/2000/svg">
+        <!-- Trees left -->
+        <ellipse cx="30" cy="210" rx="18" ry="22" fill="#b5cba0"/>
+        <rect x="27" y="210" width="6" height="30" fill="#8a7060"/>
+        <ellipse cx="60" cy="220" rx="13" ry="16" fill="#8B1A3A" opacity=".7"/>
+        <rect x="57" y="220" width="5" height="22" fill="#6d3020"/>
+        <!-- Building -->
+        <rect x="80" y="120" width="200" height="130" rx="4" fill="#fff" stroke="#ddd" stroke-width="2"/>
+        <rect x="80" y="120" width="200" height="28" rx="4" fill="#1a2744"/>
+        <!-- Roof -->
+        <polygon points="72,120 270,120 270,105 72,105" fill="#1a2744"/>
+        <polygon points="60,105 282,105 265,82 77,82" fill="#2d3e6e"/>
+        <!-- Flag -->
+        <rect x="167" y="60" width="3" height="28" fill="#555"/>
+        <rect x="170" y="60" width="20" height="12" fill="var(--primary)" rx="2"/>
+        <!-- Windows -->
+        <rect x="100" y="150" width="32" height="28" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <rect x="150" y="150" width="40" height="40" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <rect x="208" y="150" width="32" height="28" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <!-- Clock -->
+        <circle cx="170" cy="170" r="18" fill="#fff" stroke="#1a2744" stroke-width="2"/>
+        <line x1="170" y1="158" x2="170" y2="170" stroke="#1a2744" stroke-width="2"/>
+        <line x1="170" y1="170" x2="178" y2="170" stroke="#1a2744" stroke-width="2"/>
+        <!-- Door -->
+        <rect x="148" y="200" width="44" height="50" rx="4" fill="#8B1A3A"/>
+        <!-- Steps -->
+        <rect x="140" y="248" width="60" height="8" rx="2" fill="#ddd"/>
+        <rect x="80" y="248" width="200" height="4" rx="2" fill="#ccc"/>
+        <!-- Ground -->
+        <rect x="0" y="252" width="340" height="28" rx="4" fill="#e8f0dc"/>
+        <!-- Trees right -->
+        <ellipse cx="290" cy="210" rx="18" ry="22" fill="#b5cba0"/>
+        <rect x="287" y="210" width="6" height="30" fill="#8a7060"/>
+        <ellipse cx="318" cy="220" rx="13" ry="16" fill="#8B1A3A" opacity=".7"/>
+        <rect x="315" y="220" width="5" height="22" fill="#6d3020"/>
+        <!-- Floating icons -->
+        <g transform="translate(290,40)">
+          <rect x="0" y="0" width="36" height="28" rx="6" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <circle cx="10" cy="14" r="3" fill="#8B1A3A"/>
+          <circle cx="18" cy="14" r="3" fill="#aaa"/>
+          <circle cx="26" cy="14" r="3" fill="#aaa"/>
+          <polygon points="14,28 22,28 18,34" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+        </g>
+        <g transform="translate(280,75)">
+          <circle cx="10" cy="10" r="10" fill="#8B1A3A" opacity=".85"/>
+          <text x="10" y="15" text-anchor="middle" fill="#fff" font-size="12">!</text>
+        </g>
+        <g transform="translate(305,10)">
+          <polygon points="0,0 26,6 14,20" fill="#1a2744" opacity=".7"/>
+        </g>
+        <g transform="translate(240,10)">
+          <circle cx="12" cy="12" r="12" fill="#fff" stroke="#8B1A3A" stroke-width="2"/>
+          <path d="M6,12 L18,12 M12,6 L12,18" stroke="#8B1A3A" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+ 
+<!-- =============================== AUTH PAGE =============================== -->
+<div id="page-auth" class="page">
+  <div class="auth-hero">
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="18" fill="var(--navy)"/>
+            <text x="18" y="23" text-anchor="middle" fill="#fff" font-size="13" font-weight="900" font-family="Nunito">tf</text>
+          </svg>
+          <span style="font-weight:900;font-size:18px;color:var(--navy);">tech<br><span style="color:var(--primary);">flow</span></span>
+        </div>
+      </div>
+      <h1 class="auth-title">Bem-Vindo ao Inova Senai!</h1>
+      <p class="auth-subtitle">Comece a escrever seus Feedbacks</p>
+      <div class="auth-forms">
+        <div class="auth-card">
+          <h3>Cadastre-se</h3>
+          <input class="auth-input" type="text" placeholder="Nome">
+          <input class="auth-input" type="email" placeholder="E-mail">
+          <input class="auth-input" type="password" placeholder="Senha">
+          <input class="auth-input" type="text" placeholder="Turma">
+          <input class="auth-input" type="text" placeholder="Unidade">
+          <button class="btn-criar" onclick="goTo('page-feed')">Criar conta</button>
+        </div>
+        <div class="auth-card">
+          <h3>Entrar</h3>
+          <input class="auth-input" type="email" placeholder="E-mail">
+          <input class="auth-input" type="password" placeholder="Senha">
+          <input class="auth-input" type="text" placeholder="Código de acesso">
+          <button class="btn-entrar" onclick="goTo('page-feed')">Criar conta</button>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <svg width="300" height="240" viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="30" cy="185" rx="16" ry="20" fill="#b5cba0"/>
+        <rect x="27" y="185" width="5" height="26" fill="#8a7060"/>
+        <rect x="70" y="108" width="180" height="115" rx="4" fill="#fff" stroke="#ddd" stroke-width="2"/>
+        <rect x="70" y="108" width="180" height="25" rx="4" fill="#1a2744"/>
+        <polygon points="62,108 248,108 248,95 62,95" fill="#1a2744"/>
+        <polygon points="52,95 258,95 242,74 68,74" fill="#2d3e6e"/>
+        <rect x="151" y="54" width="3" height="24" fill="#555"/>
+        <rect x="154" y="54" width="18" height="10" fill="var(--primary)" rx="2"/>
+        <rect x="90" y="138" width="28" height="24" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <rect x="136" y="138" width="36" height="35" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <rect x="188" y="138" width="28" height="24" rx="3" fill="#dce8f5" stroke="#aac" stroke-width="1.5"/>
+        <circle cx="154" cy="155" r="15" fill="#fff" stroke="#1a2744" stroke-width="2"/>
+        <line x1="154" y1="145" x2="154" y2="155" stroke="#1a2744" stroke-width="2"/>
+        <line x1="154" y1="155" x2="161" y2="155" stroke="#1a2744" stroke-width="2"/>
+        <rect x="136" y="185" width="36" height="38" rx="3" fill="#8B1A3A"/>
+        <rect x="128" y="222" width="52" height="6" rx="2" fill="#ddd"/>
+        <rect x="70" y="222" width="180" height="4" rx="2" fill="#ccc"/>
+        <rect x="0" y="226" width="300" height="14" rx="3" fill="#e8f0dc"/>
+        <ellipse cx="260" cy="185" rx="16" ry="20" fill="#b5cba0"/>
+        <rect x="257" y="185" width="5" height="26" fill="#8a7060"/>
+        <ellipse cx="283" cy="192" rx="11" ry="14" fill="#8B1A3A" opacity=".7"/>
+        <rect x="280" y="192" width="5" height="20" fill="#6d3020"/>
+        <g transform="translate(256,30)">
+          <rect x="0" y="0" width="32" height="25" rx="5" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <circle cx="9" cy="12" r="3" fill="#8B1A3A"/>
+          <circle cx="16" cy="12" r="3" fill="#aaa"/>
+          <circle cx="23" cy="12" r="3" fill="#aaa"/>
+          <polygon points="12,25 20,25 16,31" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+        </g>
+        <g transform="translate(272,64)"><circle cx="9" cy="9" r="9" fill="#8B1A3A" opacity=".85"/><text x="9" y="14" text-anchor="middle" fill="#fff" font-size="11">!</text></g>
+        <g transform="translate(270,8)"><polygon points="0,0 22,5 12,18" fill="#1a2744" opacity=".7"/></g>
+      </svg>
+    </div>
+  </div>
+</div>
+ 
+<!-- =============================== FEED PAGE =============================== -->
+<div id="page-feed" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div class="feed-header">
+    <h2>💬 Feed de feedback</h2>
+  </div>
+  <div class="feed-grid" id="feed-grid"></div>
+  <button class="btn-escrever-feed" onclick="goTo('page-form')">Escreva seu feedback</button>
+</div>
+ 
+<!-- =============================== FORM PAGE =============================== -->
+<div id="page-form" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div class="feedback-form-wrap">
+    <div class="feedback-form-left">
+      <h2>✉️ Envie seu Feedback</h2>
+      <textarea class="feedback-textarea" id="fb-text" placeholder="Digite aqui . . ."></textarea>
+      <div style="overflow:hidden;">
+        <button class="btn-enviar" onclick="submitFeedback()">Enviar</button>
+      </div>
+      <div class="identity-row">
+        <label class="radio-label"><input type="radio" name="identity" value="identified" id="r-identified"> Deseja se identificar</label>
+        <label class="radio-label"><input type="radio" name="identity" value="anon" id="r-anon" checked> Deseja ser anonimo</label>
+      </div>
+      <input class="name-input" type="text" placeholder="Digite seu nome..." id="fb-name">
+      <div class="stars-rating" id="star-rating">
+        <span class="star-rate" data-v="1">☆</span>
+        <span class="star-rate" data-v="2">☆</span>
+        <span class="star-rate" data-v="3">☆</span>
+        <span class="star-rate" data-v="4">☆</span>
+        <span class="star-rate" data-v="5">☆</span>
+      </div>
+      <div class="stars-label">Qual a sua avaliação?</div>
+    </div>
+    <div class="feedback-form-right">
+      <h3>Escolha a categoria do seu comentário</h3>
+      <ul class="cat-list">
+        <li><input type="radio" name="cat" value="Bullying"> Bullying</li>
+        <li><input type="radio" name="cat" value="Funcionários"> Funcionários</li>
+        <li><input type="radio" name="cat" value="Professores"> Professores</li>
+        <li><input type="radio" name="cat" value="Materiais"> Materiais</li>
+        <li><input type="radio" name="cat" value="Infraestrutura"> Infraestrutura</li>
+        <li><input type="radio" name="cat" value="Sugestões"> Sugestões</li>
+        <li><input type="radio" name="cat" value="Outro"> Outro...</li>
+      </ul>
+      <input class="cat-other-input" type="text" placeholder="Digite..." id="cat-other" style="margin-top:12px;">
+    </div>
+  </div>
+</div>
+ 
+<!-- =============================== DETAIL PAGE =============================== -->
+<div id="page-detail" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div class="detail-wrap">
+    <div class="detail-left">
+      <h2>✉️ Feed de feedback</h2>
+      <div class="detail-card" id="detail-card-content"></div>
+      <button class="btn-voltar" onclick="goTo('page-feed')">Voltar ao início</button>
+    </div>
+    <div class="detail-right">
+      <h3>Comentários</h3>
+      <div class="comment-card">
+        <div class="comment-user">👤 Maria (COORDENADORA)</div>
+        <div class="comment-text">Ficaremos atentos e já estamos resolvendo essa questão, Obrigada pelo comentário!</div>
+      </div>
+      <div class="comment-card" style="min-height:60px;"><div class="comment-user">👤</div></div>
+      <div class="comment-card" style="min-height:60px;"><div class="comment-user">👤</div></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- =============================== STATS PAGE =============================== -->
+<div id="page-stats" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div class="stats-wrap">
+    <h2>📊 Relatórios de Feedbacks</h2>
+    <div class="stats-cards">
+      <div class="stat-card">
+        <span class="stat-card-icon">⚠️</span>
+        <div class="stat-card-title">Casos de Bullying</div>
+        <div class="stat-card-num">17</div>
+        <div class="stat-card-sub">comentários esse mês</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-icon">🛡️</span>
+        <div class="stat-card-title">Relatórios recebidos</div>
+        <div class="stat-card-num">170</div>
+        <div class="stat-card-sub">feedbacks esse mês</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-icon">💡</span>
+        <div class="stat-card-title">Professores bem avaliados<br><small style="font-weight:400;font-size:11px;">mais de 70%</small></div>
+        <div class="stat-card-num2">11</div>
+      </div>
+    </div>
+    <div class="stats-bottom">
+      <div class="stats-chart-card" style="flex:1.4;">
+        <h3>⚠️ Casos de Bullying</h3>
+        <div class="pie-wrap">
+          <svg class="pie-svg" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <!-- 58% primary, 27% navy, 15% yellow -->
+            <circle r="15.9" cx="18" cy="18" fill="#1a2744"/>
+            <circle r="15.9" cx="18" cy="18" fill="transparent" stroke="var(--primary)" stroke-width="31.8"
+              stroke-dasharray="36.5 63.5" stroke-dashoffset="25" transform="rotate(-90 18 18)"/>
+            <circle r="15.9" cx="18" cy="18" fill="transparent" stroke="var(--accent-yellow)" stroke-width="31.8"
+              stroke-dasharray="9.4 90.6" stroke-dashoffset="-11.5" transform="rotate(-90 18 18)"/>
+          </svg>
+          <div class="pie-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--primary);"></div>58% - Apelidos</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--navy);"></div>27% - Agressões verbais</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent-yellow);"></div>15% - Exclusão Social</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-recent" style="flex:1;">
+        <h3>Avaliações Recentes</h3>
+        <div class="recent-card">
+          <div class="recent-card-header">👤 Anônimo <span class="feed-cat-badge">Infraestrutura</span></div>
+          <div class="recent-card-text">Cadeiras da sala 3 bem desgastadas e quebradas</div>
+        </div>
+        <div class="recent-card">
+          <div class="recent-card-header">👤 Anônimo <span class="feed-cat-badge">Bullying</span></div>
+          <div class="recent-card-text">Grupo colocando apelidos sem noção em alunos, sem motivo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- =============================== PROFILE PAGE =============================== -->
+<div id="page-perfil" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div class="profile-wrap">
+    <div class="profile-header">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-info">
+        <h2>Meu Perfil</h2>
+        <p>Letícia Cerial</p>
+      </div>
+      <button class="btn-edit">Editar Perfil</button>
+    </div>
+    <div class="profile-menu">
+      <div class="profile-menu-item">
+        <span class="menu-icon">⚙️</span> Configurações
+      </div>
+      <div class="profile-menu-item">
+        <span class="menu-icon">💬</span> Meus Feedbacks
+      </div>
+      <div class="profile-menu-item">
+        <span class="menu-icon">🔔</span> Notificações
+      </div>
+    </div>
+    <button class="btn-voltar-inicio" onclick="goTo('page-feed')">voltar ao início</button>
+  </div>
+</div>
+ 
+<!-- =============================== ENVIADO PAGE =============================== -->
+<div id="page-enviado" class="page">
+  <nav class="navbar">
+    <div class="navbar-logo" onclick="goTo('page-landing')" style="cursor:pointer;">
+      <div class="logo-circle" style="width:40px;height:40px;font-size:13px;">is</div>
+      <div style="line-height:1.1;margin-left:8px;">
+        <span style="font-weight:900;font-size:14px;color:var(--primary);">inova<br>senai</span>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#" onclick="goTo('page-feed');return false;">Inicio</a>
+      <a href="#" onclick="goTo('page-form');return false;">Enviar meu feedback</a>
+      <a href="#" onclick="goTo('page-stats');return false;">Estatisticas</a>
+    </div>
+    <div class="navbar-right">
+      <span class="user-icon">👤</span>
+      <button class="btn-perfil" onclick="goTo('page-perfil')">Meu Perfil</button>
+    </div>
+  </nav>
+  <div style="display:flex;align-items:flex-start;padding:16px 48px;">
+    <span style="font-size:16px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px;">✉️ Enviado</span>
+  </div>
+  <div class="enviado-content">
+    <h1 class="enviado-title">Muito Obrigada pelo Feedback!</h1>
+    <button class="btn-enviado btn-enviado-primary" onclick="goTo('page-feed')">Voltar a página Inicial</button>
+    <button class="btn-enviado btn-enviado-outline" onclick="goTo('page-form')">Escrever outro feedback</button>
+  </div>
+</div>
+ 
+<script>
+// ===== SAMPLE FEEDBACKS DATA =====
+const feedbacks = [
+  { id:1, user:'Anônimo', cat:'Infraestrutura', text:'As cadeiras da sala de aula estão completamente desgastadas. Muitas estão quebradas e os alunos precisam ficar de pé ou sentar em cadeiras instáveis durante as aulas, o que prejudica muito a aprendizagem.', rating:2 },
+  { id:2, user:'Anônimo', cat:'Bullying', text:'Um grupo de alunos fica colocando apelidos nas pessoas sem motivo algum. Isso está afetando o bem-estar de muita gente na escola e precisa ser resolvido urgentemente.', rating:1 },
+  { id:3, user:'Anônimo', cat:'Funcionários', text:'Os funcionários da limpeza são muito dedicados e mantêm o ambiente sempre organizado. Gostaria que tivessem mais reconhecimento pelo trabalho que realizam.', rating:4 },
+  { id:4, user:'Anônimo', cat:'Bullying', text:'Há alunos que ficam excluindo colegas das atividades em grupo propositalmente. Isso é uma forma de bullying que muitas vezes passa despercebida pelos professores.', rating:1 },
+  { id:5, user:'Anônimo', cat:'Professores', text:'Os professores do módulo de programação são excelentes! Explicam bem, são pacientes e sempre estão disponíveis para tirar dúvidas. Parabéns pela qualidade do ensino.', rating:4 },
+  { id:6, user:'Anônimo', cat:'Material', text:'O material didático está desatualizado. Precisamos de livros e apostilas com conteúdo mais recente, especialmente na área de tecnologia.', rating:4 },
+  { id:7, user:'Anônimo', cat:'Bullying', text:'Situação de bullying recorrente na cantina durante o intervalo. Alunos mais velhos intimidam os mais novos constantemente.', rating:1 },
+  { id:8, user:'Anônimo', cat:'Bullying', text:'Comentários preconceituosos frequentes nas redes sociais do grupo da turma. Isso está causando muito desconforto para vários alunos.', rating:1 },
+];
+ 
+let currentRating = 0;
+let submittedFeedbacks = [...feedbacks];
+ 
+// ===== NAVIGATION =====
+function goTo(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0,0);
+}
+ 
+// ===== RENDER FEED =====
+function renderFeed() {
+  const grid = document.getElementById('feed-grid');
+  grid.innerHTML = '';
+  submittedFeedbacks.forEach(fb => {
+    const card = document.createElement('div');
+    card.className = 'feed-card';
+    card.innerHTML = `
+      <div class="feed-card-header">
+        <div class="feed-card-user">👤 ${fb.user}</div>
+        <span class="feed-cat-badge">${fb.cat}</span>
+      </div>
+      <div class="feed-card-text">${fb.text.substring(0,120)}${fb.text.length>120?'...':''}</div>
+      <div class="stars-row">${renderStars(fb.rating)}</div>
+    `;
+    card.onclick = () => openDetail(fb);
+    grid.appendChild(card);
+  });
+}
+ 
+function renderStars(rating) {
+  let s = '';
+  for(let i=1;i<=5;i++) s += `<span class="star ${i<=rating?'filled':''}">★</span>`;
+  return s;
+}
+ 
+// ===== DETAIL =====
+function openDetail(fb) {
+  const container = document.getElementById('detail-card-content');
+  container.innerHTML = `
+    <div class="detail-card-header">
+      <div class="feed-card-user">👤 ${fb.user}</div>
+      <span class="feed-cat-badge">${fb.cat}</span>
+    </div>
+    <div class="detail-text">${fb.text}</div>
+    <div class="stars-row">${renderStars(fb.rating)}</div>
+  `;
+  goTo('page-detail');
+}
+ 
+// ===== STAR RATING =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderFeed();
+  const stars = document.querySelectorAll('.star-rate');
+  stars.forEach(s => {
+    s.addEventListener('mouseover', () => highlightStars(parseInt(s.dataset.v)));
+    s.addEventListener('click', () => { currentRating = parseInt(s.dataset.v); highlightStars(currentRating); });
+  });
+  document.getElementById('star-rating').addEventListener('mouseleave', () => highlightStars(currentRating));
+ 
+  // Identity radio
+  document.querySelectorAll('input[name="identity"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const nameInput = document.getElementById('fb-name');
+      nameInput.style.display = r.value==='identified' ? 'block' : 'none';
+    });
+  });
+  document.getElementById('fb-name').style.display = 'none';
+});
+ 
+function highlightStars(n) {
+  document.querySelectorAll('.star-rate').forEach(s => {
+    s.classList.toggle('filled', parseInt(s.dataset.v) <= n);
+    s.textContent = parseInt(s.dataset.v) <= n ? '★' : '☆';
+  });
+}
+ 
+// ===== SUBMIT =====
+function submitFeedback() {
+  const text = document.getElementById('fb-text').value.trim();
+  const catEl = document.querySelector('input[name="cat"]:checked');
+  if(!text) { alert('Por favor, escreva seu feedback!'); return; }
+  if(!catEl) { alert('Por favor, escolha uma categoria!'); return; }
+  const nameInput = document.getElementById('fb-name');
+  const isAnon = document.getElementById('r-anon').checked;
+  const newFb = {
+    id: submittedFeedbacks.length+1,
+    user: isAnon ? 'Anônimo' : (nameInput.value||'Anônimo'),
+    cat: catEl.value,
+    text: text,
+    rating: currentRating||0
+  };
+  submittedFeedbacks.unshift(newFb);
+  // Reset form
+  document.getElementById('fb-text').value = '';
+  document.getElementById('r-anon').checked = true;
+  nameInput.value = '';
+  nameInput.style.display = 'none';
+  document.querySelectorAll('input[name="cat"]').forEach(r => r.checked=false);
+  currentRating = 0;
+  highlightStars(0);
+  renderFeed();
+  goTo('page-enviado');
+}
+</script>
+</body>
+</html>
